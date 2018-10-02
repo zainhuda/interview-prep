@@ -1,5 +1,5 @@
 // google
-// given houses and stores array: find the closest street for a given house for each house
+// given houses and stores array: find the closest store for a given house for each house
 // you can also use imports, for example:
 // import java.util.*;
 import java.util.*;
@@ -50,7 +50,7 @@ class Solution {
         return results;
 
     }
-    public int storeNumber(int searchValue, Set<Integer> set,int min, int max, int house) {
+    public int storeNumber(int searchValue, Set<Integer> set, int min, int max, int house) {
         // check min and max
         if (searchValue == min) {
             return searchValue;
