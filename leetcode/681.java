@@ -1,5 +1,9 @@
 class Solution {
-    // check the 4^4 possibilities of time and find smallest one
+  // check the 4^4 possibilities of time and find smallest one
+  // we do a bruteforce method to do a 4^4 possibility check
+  // and we check the time elapsed from the given time
+  // this gives us the smallest time elapsed therefor the closest to the given time
+  // we return that, similar to a dynamic programming question
     public String nextClosestTime(String time) {
         // read time into an array of ints
         int hours = 60*Integer.parseInt(time.substring(0, 2));
