@@ -26,4 +26,8 @@ class Solution {
         return Math.max(leftHeight, rightHeight)+1;
         
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 057ad22ceac16aebd14767902e9f7dd8cca343e1
