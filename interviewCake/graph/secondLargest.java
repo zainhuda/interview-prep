@@ -31,15 +31,18 @@ public class Solution {
     public static int findSecondLargest(BinaryTreeNode rootNode) {
 
         // find the second largest item in the binary search tree
-        if (rootNode.left != null & rootNode.right == null) {
-            return findLargest(rootNode.left);
+        while (rootNode != null) {
+            if (rootNode.left != null & rootNode.right == null) {
+                return findLargest(rootNode.left);
+            }
+            
+            if (rootNode.right != null && rootNode.right.left == null && rootNode.right.right == null) {
+                return rootNode.value;
+            }
+            rootNode = rootNode.right;
+            //return findSecondLargest(rootNode.right);   
         }
-        
-        if (rootNode.right != null && rootNode.right.left == null && rootNode.right.right == null) {
-            return rootNode.value;
-        }
-        
-        return findSecondLargest(rootNode.right);
+        return rootNode.value;
     }
     
     public static int findLargest(BinaryTreeNode node) {
