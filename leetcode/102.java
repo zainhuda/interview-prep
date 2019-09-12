@@ -8,21 +8,20 @@
  * }
  */
 class Solution {
-    // iterative sol using queue, this is hard
-    // for each node visited we add it to the queue, and for loop for the count of queue (visitng the nodes in the level)
     public List<List<Integer>> levelOrder(TreeNode root) {
+        // bfs 
+        // we can use a queue, 
+        Queue<TreeNode> store = new LinkedList<>();
         List<List<Integer>> res = new ArrayList<>();
         if (root == null) return res;
-        Queue<TreeNode> queue = new LinkedList<>();
-        queue.add(root);
-        while(!queue.isEmpty()) {
+        store.add(root);
+        while (!store.isEmpty()) {
+            int level = store.size();
             List<Integer> temp = new ArrayList<>();
-            int len = queue.size();
-            for (int i = 0; i < len; i++) {
-                TreeNode node = queue.poll();
-                temp.add(node.val);
-                if (node.left != null) queue.add(node.left);
-                if (node.right != null) queue.add(node.right);
+            for (int i = 0; i < level; i++) {
+                if (store.peek().left != null) store.add(store.peek().left);
+                if (store.peek().right != null) store.add(store.peek().right);
+                temp.add(store.remove().val);
             }
             res.add(temp);
         }
