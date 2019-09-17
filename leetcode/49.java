@@ -1,17 +1,16 @@
 class Solution {
-    // utilize hashmaps and sorting babyyyyyy
     public List<List<String>> groupAnagrams(String[] strs) {
-        HashMap<String, List> builder = new HashMap<>();
-        for (String word: strs) {
-            // innit
-            char[] chars = word.toCharArray();
-            // sort to "normalize"
-            Arrays.sort(chars);
-            String key = String.valueOf(chars);
-            if (!builder.containsKey(key)) builder.put(key, new ArrayList<>());
-            builder.get(key).add(word);
+        // using int[26] for key
+        Map<String, ArrayList<String>> result = new HashMap<>();
+        for (String s : strs) {
+            int[] count = new int[26];
+            for (Character c : s.toCharArray()) {
+                count[c - 'a']++;
+            }
+            String key = Arrays.toString(count);
+            result.putIfAbsent(key, new ArrayList<>());
+            result.get(key).add(s);
         }
-        return new ArrayList(builder.values());
+        return new ArrayList(result.values());
     }
-    
 }

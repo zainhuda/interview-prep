@@ -1,30 +1,20 @@
-/**
- * Definition for an interval.
- * public class Interval {
- *     int start;
- *     int end;
- *     Interval() { start = 0; end = 0; }
- *     Interval(int s, int e) { start = s; end = e; }
- * }
- */
 class Solution {
-    private class IntervalComparator implements Comparator<Interval> {
-        @Override
-        public int compare(Interval a, Interval b) {
-            return a.start - b.start;
-        }
-    }
-    public List<Interval> merge(List<Interval> intervals) {
-        // hardest part is sorting 
-        Collections.sort(intervals, new IntervalComparator());
-        LinkedList<Interval> merged = new LinkedList<>();
-        for (Interval i: intervals) {
-            if (merged.isEmpty() || merged.getLast().end < i.start) {
-                merged.add(i);
+    public int[][] merge(int[][] intervals) {
+        // we sort first by the starting point and then we just iterate through 
+        // and change ending time if it's earlier than start, hence a "merge"
+        if (intervals.length == 0) return new int[0][];
+        Arrays.sort(intervals, (i1, i2) -> Integer.compare(i1[0], i2[0]));
+        List<int[]> result = new ArrayList<>();
+        int[] curr = intervals[0];
+        result.add(curr);
+        for (int[] interval : intervals) {
+            if (curr[1] >= interval[0]) {
+                curr[1] = Math.max(interval[1], curr[1]);
             } else {
-                merged.getLast().end = Math.max(i.end, merged.getLast().end);
+                curr = interval;
+                result.add(curr);
             }
         }
-        return merged;
+        return result.toArray(new int[result.size()][]);
     }
 }
