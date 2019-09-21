@@ -2,18 +2,29 @@ class Solution {
     public List<List<Integer>> pacificAtlantic(int[][] matrix) {
         // dfs, we send it down left and up and right and down 
         // can we generalize the dfs?
+        // do inside out
+        // two boolean arrays? 
         List<List<Integer>> res = new ArrayList<>();
         if (matrix.length == 0 || matrix[0].length == 0) return res;
-        // we try every single coordinate 
-        System.out.println(pacificDfs(matrix, 2, 1));
-        System.out.println(atlanticDfs(matrix, 2, 1));
-        System.out.println("IGNORE");
+        boolean[][] pacific = new boolean[matrix.length][matrix[0].length];
+        boolean[][] atlantic = new  boolean[matrix.length][matrix[0].length];
+        
+        for (int i = 0; i < matrix[0].length; i++) {
+            dfs(matrix, pacific, Integer.MIN_VALUE, 0, i);
+            dfs(matrix, atlantic, Integer.MIN_VALUE, matrix.length-1, i);
+        }
+        
+        for (int i = 0; i < matrix.length; i++) {
+            dfs(matrix, pacific, Integer.MIN_VALUE, i, 0);
+            dfs(matrix, atlantic, Integer.MIN_VALUE, i, matrix[0].length-1);
+        }
+        
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[0].length; j++) {
-                if (pacificDfs(matrix, i, j) && atlanticDfs(matrix, i, j)) {
+                if (atlantic[i][j] && pacific[i][j]) {
                     List<Integer> curr = new ArrayList<>();
-                    curr.add(j);
                     curr.add(i);
+                    curr.add(j);
                     res.add(curr);
                 }
             }
@@ -21,37 +32,15 @@ class Solution {
         return res;
     }
     
-    public boolean pacificDfs(int[][] matrix, int i, int j) {
-        System.out.println(i);
-        System.out.println(j);
-        System.out.println("pacfic");
-        if (i == 0  || j == 0) return true;
-        if (i < 0 || j < 0) return false;
-        boolean rowCheck = false, colCheck = false;
-        if (i-1 >= 0 && matrix[i-1][j] <= matrix[i][j]) {
-            rowCheck = pacificDfs(matrix, i-1, j);
+    // pacific and atlantic dfs, how do we make it true 
+    public void dfs(int[][] matrix, boolean[][] visited, int height, int i, int j) {
+        if (i < 0 ||  j < 0 || i >= matrix.length || j >= matrix[0].length || visited[i][j] || matrix[i][j] < height) {
+            return;
         }
-        if (j-1 >= 0 && matrix[i][j-1] <= matrix[i][j]) {
-            colCheck = pacificDfs(matrix, i, j-1);
-        }
-        System.out.println(matrix[i][j]);
-        System.out.println(matrix[i][j-1]);
-        return rowCheck || colCheck;
-    }
-    
-    public boolean atlanticDfs(int[][] matrix, int i, int j) {
-        System.out.println(i);
-        System.out.println(j);
-        System.out.println("atlantic");
-        if (i == matrix.length-1 || j == matrix[0].length-1) return true;
-        if (i > matrix.length-1 || j > matrix[0].length-1) return false;
-        boolean rowCheck = false, colCheck = false;
-        if (i+1 < matrix.length && matrix[i+1][j] <= matrix[i][j]) {
-            rowCheck = atlanticDfs(matrix, i+1, j);
-        }
-        if (j+1 < matrix[0].length && matrix[i][j+1] <= matrix[i][j]) {
-            colCheck = atlanticDfs(matrix, i, j+1);
-        }
-        return rowCheck || colCheck;
+        visited[i][j] = true;
+        dfs(matrix, visited, matrix[i][j], i+1, j);
+        dfs(matrix, visited, matrix[i][j], i-1, j);
+        dfs(matrix, visited, matrix[i][j], i, j+1);
+        dfs(matrix, visited, matrix[i][j], i, j-1);
     }
 }
