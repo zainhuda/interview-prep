@@ -1,25 +1,21 @@
 class Solution {
 	public int satisfyingSubarrays(int[] arr, int k) {
-		// two pointers did not work
-		// convert every odd number to 1 and even number to 0
-		// if sum of a subarray is k, it is a satisfying subarray
-		// can we do better than On^2
-		for (int i = 0; i < arr.length; i++) {
-			if (arr[i] % 2 == 0) {
-				arr[i] = 0;
-			} else {
-				arr[i] = 1;
+		int left = 0, right = 0, count = 0, result = 0;
+		while (right < arr.length) {
+			if (arr[right] % 2 == 1) {
+				count++;
 			}
-		}
-		
-		int result = 0, sum = 0;
-		for (int i = 0; i < arr.length; i++) {
-			sum = 0;
-			for (int j = i; j < arr.length; j++) {
-				sum += arr[j];
-				if (sum == k) result++;
-				if (sum > k) break;
+			if (count == k) result++;
+			if (count > k) {
+				while (count >= k && left < right) {
+					if (arr[left] % 2 == 1) {
+						count--;
+					}
+					if (count == k) result++;
+					left++;
+				} 
 			}
+			right++;
 		}
 		return result;
     }
@@ -31,7 +27,7 @@ class Solution {
         System.out.println(res);
         res = sol.satisfyingSubarrays(new int[] {1,3,4,5}, 0);
         System.out.println(res);
-        res = sol.satisfyingSubarrays(new int[] {1,4,6,8,10}, 1);
+        res = sol.satisfyingSubarrays(new int[] {2,2,5,6,9,2,11,9,2,11,12}, 1);
         System.out.println(res);
     }
 }
