@@ -1,21 +1,22 @@
 class Solution {
 	public int satisfyingSubarrays(int[] arr, int k) {
-		int left = 0, right = 0, count = 0, result = 0;
-		while (right < arr.length) {
-			if (arr[right] % 2 == 1) {
-				count++;
+		// naaive approach On^2
+		// my thoughts on optimal soluton:
+		// creating an array of nums "odd groupings"
+		// maybe combinatoric solution is smt like that ? (arr[i]+1) * (arr[i+m]+1) = combinations for that given subarray
+		int result = 0;
+		for (int i = 0; i < arr.length; i++) {
+			int count = 0;
+			for (int j = i; j < arr.length; j++) {
+				if (arr[j] % 2 == 1) {
+					count++;
+				}
+				if (count == k) {
+					result++;
+				} else if (count > k) {
+					break;
+				}
 			}
-			if (count == k) result++;
-			if (count > k) {
-				while (count >= k && left < right) {
-					if (arr[left] % 2 == 1) {
-						count--;
-					}
-					if (count == k) result++;
-					left++;
-				} 
-			}
-			right++;
 		}
 		return result;
     }

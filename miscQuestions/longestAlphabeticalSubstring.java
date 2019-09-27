@@ -4,7 +4,8 @@ class Solution {
         // Using left to constrict the string, right to expand the string
         if (s == null) throw new IllegalArgumentException("Must input string!");
     	if (s.length() == 0) return "";
-    	if (s.length() == 1) return s;
+        if (s.length() == 1) return s;
+        s = s.toLowerCase();
     	int left = 0, right = 1;
         int[] store = {0, 0, 0};
         while (left < s.length() && right < s.length()) {
