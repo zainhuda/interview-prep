@@ -1,20 +1,21 @@
 class Solution {
     public int lengthOfLIS(int[] nums) {
-        if (nums.length == 0) return 0;
-
-        int[] dp = new  int[nums.length];
-        dp[0] = 1;
-        int longest = 1;
-        for (int i = 1; i < dp.length; i++) {
-            int largestSeen = 0;
-            for (int j = 0; j < i; j++) {
-                if (nums[j] < nums[i]) {
-                    largestSeen = Math.max(largestSeen, dp[j]);
+        // On^2 is very easy 
+        if (nums == null || nums.length < 1) return 0;
+        int size = 0;
+        for (int num : nums) {
+            int left = 0, right = size;
+            while (left != right) {
+                int mid = left + (right-left)/2;
+                if (num > nums[mid]) {
+                    left = mid+1;
+                } else {
+                    right = mid;
                 }
             }
-            dp[i] = largestSeen + 1;
-            longest = Math.max(dp[i], longest);
+            nums[left] = num;
+            if (left == size) size++;
         }
-        return longest;
+        return size;
     }
 }
