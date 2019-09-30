@@ -1,35 +1,27 @@
-/**
- * Definition for an interval.
- * public class Interval {
- *     int start;
- *     int end;
- *     Interval() { start = 0; end = 0; }
- *     Interval(int s, int e) { start = s; end = e; }
- * }
- */
 class Solution {
-    public int minMeetingRooms(Interval[] intervals) {
-        int[] startTimes = new int[intervals.length];
-        int[] endTimes = new int[intervals.length];
-        for (int i = 0; i<intervals.length; i++) {
-            startTimes[i] = intervals[i].start;
-            endTimes[i] = intervals[i].end;
+    public int minMeetingRooms(int[][] intervals) {
+        // we sort the input and then do the badabing badaboom
+        if (intervals.length < 1) return 0;
+        
+        int[] start = new int[intervals.length];
+        int[] end = new int[intervals.length];
+        for (int i = 0; i < intervals.length; i++) {
+            start[i] = intervals[i][0];
+            end[i] = intervals[i][1];
         }
-        Arrays.sort(startTimes);
-        Arrays.sort(endTimes);
-        int minRooms = 0;
-        int start = 0;
-        int end = 0;
-        while (start < intervals.length) {
-            if (startTimes[start] >= endTimes[end]) {
-                minRooms--;
-                end++;
+        Arrays.sort(start);
+        Arrays.sort(end);
+        
+        int count = 0;
+        int endPointer = 0, startPointer = 0;
+        while (startPointer < intervals.length) {
+            if (start[startPointer] >= end[endPointer]) {
+                count--;
+                endPointer++;
             }
-            minRooms++;
-            start++;
+            count++;
+            startPointer++;
         }
-
-
-        return minRooms;
+        return count;
     }
 }
