@@ -1,90 +1,78 @@
 class LRUCache {
-    class LinkedNode {
-      int key;
-      int value;
-      LinkedNode prev;
-      LinkedNode next;
+    // hashmap holds integer, and node h value held
+    class TreeNode {
+        TreeNode next;
+        TreeNode prev;
+        int key;
+        int val;
+        public TreeNode(int key, int val) {
+            this.key = key;
+            this.val = val;
+        }
     }
-
-    void addNode(LinkedNode node) {
+    HashMap<Integer, TreeNode> map;
+    TreeNode head, tail;
+    int capacity;
+    int size;
+    // need a remove method
+    // and we keep track of head and tail
+    public LRUCache(int capacity) {
+        this.map = new HashMap<>();
+        this.head = new TreeNode(-1, -1);
+        this.tail = new TreeNode(-1, -1);
+        this.head.next = this.tail;
+        this.tail.prev = this.head;
+        this.capacity = capacity;
+        this.size = 0;
+    }
+    
+    public int get(int key) {
+        if (!map.containsKey(key)) return -1;
+        TreeNode ret = map.get(key);
+        // Remove node
+        remove(ret);
+        // Add to head of list, update
+        update(ret);
+        // Return val
+        return ret.val;
+    }
+    
+    public void put(int key, int value) {
+        if (map.containsKey(key)) {
+            TreeNode ret = map.get(key);
+            ret.val = value;
+            remove(ret);
+            update(ret);
+            return;
+        }
+        if (size == capacity) {
+            // need to remove
+            TreeNode removeNode = popTail();
+            map.remove(removeNode.key);
+            size--;
+        }
+        size++;
+        TreeNode node = new TreeNode(key, value);
+        map.put(key, node);
+        update(node);
+    }
+    
+    public TreeNode popTail() {
+        TreeNode node = tail.prev;
+        remove(node);
+        return node;
+    }
+    public void update(TreeNode node) {
         node.prev = head;
         node.next = head.next;
-
         head.next.prev = node;
         head.next = node;
     }
-
-    void removeNode(LinkedNode node) {
-        LinkedNode previous = node.prev;
-        LinkedNode next = node.next;
-        previous.next = next;
-        next.prev = previous;
-    }
-
-    void moveHead(LinkedNode node) {
-        this.removeNode(node);
-        this.addNode(node);
-    }
-
-    LinkedNode popTail() {
-        LinkedNode last = tail.prev;
-        this.removeNode(last);
-        return last;
-    }
-
-    int capacity;
-    int count; // amount in cache
-
-    //LinkedListNode holds key and value pairs
-    HashMap<Integer,LinkedNode> cache;
-    LinkedNode head, tail;
-
-    public LRUCache(int capacity) {
-        this.count = 0;
-        this.capacity = capacity;
-        cache = new HashMap<Integer,LinkedNode>(capacity);
-        // LL initalizae
-        head = new LinkedNode();
-        head.prev = null;
-        tail = new LinkedNode();
-        tail.next = null;
-        head.next = tail;
-        tail.prev = head;
-    }
-
-    int get(int key) {
-        // check if it exists, if so we retrieve it
-        // and push it to the end of the list
-        // 2 - 3 - 4 - 5
-        // find 2
-        // 3 - 4 - 5 - 2
-        LinkedNode get = cache.get(key);
-        if (get != null) {
-            this.moveHead(get);
-            return get.value;
-        }
-        return -1;
-    }
-
-    void put(int key, int value) {
-        LinkedNode get = cache.get(key);
-        if (get == null) {
-          // check if capacity is full
-          if (capacity <= count) {
-            LinkedNode removed = this.popTail();
-            cache.remove(removed.key);
-            --count;
-          }
-          count++;
-          LinkedNode newNode = new LinkedNode();
-          newNode.key = key;
-          newNode.value = value;
-          this.addNode(newNode);
-          cache.put(key, newNode);
-        } else {
-          get.value = value;
-          this.moveHead(get);
-        }
+    
+    public void remove(TreeNode node) {
+        TreeNode temp = node.prev;
+        node.prev.next = node.next;
+        node.next.prev = temp;
     }
 }
 

@@ -1,22 +1,23 @@
 class Solution {
-    // something of a pointer/recursive approach 
     public List<List<Integer>> permute(int[] nums) {
-        List<List<Integer>> result = new ArrayList<>();
-        backtrack(result, new ArrayList<Integer>(), nums);
-        return result;
+        // distinct integers, we can just do simple permuations
+        List<List<Integer>> res = new ArrayList<>();
+        builder(res, nums, new boolean[nums.length], new ArrayList<>());
+        return res;
     }
     
-    public void backtrack(List<List<Integer>> result, List<Integer> num, int[] nums) {
-        if (num.size() == nums.length) {
-            result.add(new ArrayList<>(num));
+    public void builder(List<List<Integer>> res, int[] nums, boolean[] visited, List<Integer> temp) {
+        if (temp.size() == nums.length) {
+            res.add(new ArrayList<>(temp));
             return;
-        } else {
-            for (int i = 0; i<nums.length; i++) {
-                if (num.contains(nums[i])) continue;
-                num.add(nums[i]);
-                backtrack(result, num, nums);
-                num.remove(num.size()-1);
-            }
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (visited[i]) continue;
+            visited[i] = true;
+            temp.add(nums[i]);
+            builder(res, nums, visited, temp);
+            temp.remove(temp.size()-1);
+            visited[i] = false;
         }
     }
 }

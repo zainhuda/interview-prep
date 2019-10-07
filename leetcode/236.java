@@ -8,24 +8,17 @@
  * }
  */
 class Solution {
-    // LCA is the latest node that leads to nodes p and q
-    // bottom up approach, can propogate a boolean value, when both subtrees return true, then we know we have found LCA
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        TreeNode res = new TreeNode(-1);
-        lowestCommonAncestor(root, p, q, res);
-        return res;
-    }
-    
-    private boolean lowestCommonAncestor(TreeNode node, TreeNode p, TreeNode q, TreeNode res) {
-        if (node == null) return false;
+        // recursive approach
+        if (root == null) return null;
+        if (root.val == p.val || root.val == q.val) return root;
         
-        int leftTree = lowestCommonAncestor(node.left, p, q, res) ? 1 : 0;
-        int rightTree = lowestCommonAncestor(node.right, p, q, res) ? 1: 0;
-        int currTree = (node.val == p.val || node.val == q.val) ? 1 : 0;
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
         
-        if (leftTree + rightTree + currTree >= 2) res.val = node.val;
+        if (left == null) return right;
+        if (right ==  null) return left;
         
-        return (leftTree + rightTree + currTree > 0);
-        
+        return root;
     }
 }
