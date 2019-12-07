@@ -6,7 +6,7 @@ class Solution {
     class Tuple {
         char c;
         int val;
-        class Tuple(char c, int val) {
+        public Tuple(char c, int val) {
             this.c = c;
             this.val = val;
         }
@@ -33,7 +33,7 @@ class Solution {
         while (!stack.isEmpty()) {
             Tuple tup = stack.pop();
             for (int i = 0; i < tup.val; i++) {
-                sb.append(sb.c);
+                sb.append(stack.c);
             }
         }
 

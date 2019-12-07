@@ -1,4 +1,5 @@
 class Solution {
+    int[][] directions = new int[][] {{0,-1}, {1,0}, {-1,0}, {0,1}};
     public void solve(char[][] board) {
         if (board == null || board.length < 1 || board[0].length < 1) return;
         int n = board.length-1;
@@ -24,11 +25,9 @@ class Solution {
     
     public void dfs(boolean[][] visited, char[][] board, int i, int j) {
         if (i < 0 || j < 0 || i >= board.length || j >= board[0].length || visited[i][j] || board[i][j] == 'X') return;
-        board[i][j] = 'O';
         visited[i][j] = true;
-        dfs(visited, board, i+1, j);
-        dfs(visited, board, i-1, j);
-        dfs(visited, board, i, j+1);
-        dfs(visited, board, i, j-1);
+        for (int[] direction : directions) {
+            dfs(visited, board, i+direction[0], j+direction[1]);
+        }
     }
 }

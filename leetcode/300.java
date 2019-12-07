@@ -1,20 +1,22 @@
 class Solution {
     public int lengthOfLIS(int[] nums) {
-        // On^2 is very easy 
-        if (nums == null || nums.length < 1) return 0;
+        // binary search dp way
+        // for each num, we use bserch to find where we put it
+        // if its end of arr, we inc size
+        int[] dp = new int[nums.length];
         int size = 0;
         for (int num : nums) {
-            int left = 0, right = size;
-            while (left != right) {
-                int mid = left + (right-left)/2;
-                if (num > nums[mid]) {
-                    left = mid+1;
+            int low = 0, high = size;
+            while (low != high) {
+                int mid = low + (high-low)/2;
+                if (dp[mid] < num) {
+                    low = mid+1;
                 } else {
-                    right = mid;
+                    high = mid;
                 }
             }
-            nums[left] = num;
-            if (left == size) size++;
+            dp[low] = num;
+            if (low == size) size++;
         }
         return size;
     }

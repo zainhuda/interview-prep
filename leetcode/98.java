@@ -8,28 +8,20 @@
  * }
  */
 class Solution {
-   public boolean isValidBST(TreeNode root) {
-       // edge case checking
-       if (root == null) return true;
-       if (root.left == null && root.right == null) return true;
-       ArrayList<Integer> list = new ArrayList<>();
-       inOrder(root, list);
-       boolean check = true;
-       // check if array is strictly increasing
-       for (int i = 1; i < list.size(); i++) {
-           if (list.get(i-1) >= list.get(i)) {
-               check = false;
-               break;
-           }
-       }
-
-       return check;
-   }
-   public void inOrder(TreeNode node, ArrayList<Integer> list) {
-       if (node == null) return;
-       inOrder(node.left, list);
-       list.add(node.val);
-       inOrder(node.right, list);
-
-   }
+    public boolean isValidBST(TreeNode root) {
+        Deque<TreeNode> stack = new ArrayDeque<>();
+      
+        double lastVal = -Double.MAX_VALUE;
+        while (!stack.isEmpty() || root != null) {
+            while (root != null) {
+                stack.push(root);
+                root = root.left;
+            }
+            root = stack.pop();
+            if (root.val <= lastVal) return false;
+            lastVal = root.val;
+            root = root.right;
+        }
+        return true;
+    }
 }

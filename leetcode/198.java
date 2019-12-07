@@ -1,21 +1,15 @@
 //  useful link
 // https://leetcode.com/problems/house-robber/discuss/156523/From-good-to-great.-How-to-approach-most-of-DP-problems.
 class Solution {
-    // can rob nums.length - 2 houses
-    // we propogate and compare at ith house the max value between
-    // f(i-2) + f(i) vs f(i-1)
-    // f is a function which represents the money at ith house
-    // we are updating f(i-2) as we go down the array
-    // if at ith house, f(i-1) yields more money than f(i-2)+f(i) then we switch
-    // our robbing scheme
     public int rob(int[] nums) {
-        int previousMax = 0; // f(i-2)
-        int currentMax = 0; // f(i-1)
-        for (int x: nums) {
-            int temp = currentMax;
-            currentMax = Math.max(previousMax + x, currentMax);
-            previousMax = temp;
+        // dp either continue to rob house-2 or start with house-1;
+        // we keep a max of the money we've stolen so far
+        if (nums.length == 0) return 0;
+        int[] dp = new int[nums.length+1];
+        dp[1] = nums[0];
+        for (int i = 2; i < dp.length; i++) {
+            dp[i] = Math.max(dp[i-1], dp[i-2]+nums[i-1]);
         }
-        return currentMax;
+        return dp[nums.length];
     }
 }

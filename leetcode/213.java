@@ -1,20 +1,21 @@
 class Solution {
-    // extension of house robber
-    // use solution we already have
     public int rob(int[] nums) {
+        // we tiehr rob i house or i+1 house 
+        if (nums.length == 0) return 0;
         if (nums.length == 1) return nums[0];
-        // two cases, rob first house, or rob last house
-        return Math.max(rob(nums, 0, nums.length-2), rob(nums, 1, nums.length-1));
+        return Math.max(robHelper(nums, 0, nums.length-2), robHelper(nums, 1, nums.length-1));
     }
-
-    private int rob(int[] nums, int low, int high) {
-        int previousMax = 0; // f(i-2)
-        int currentMax = 0; // f(i-1)
+    
+    public int robHelper(int[] nums, int low, int high) {
+        int i1 = 0, i2 = 0;
         for (int i = low; i <= high; i++) {
-            int temp = currentMax;
-            currentMax = Math.max(previousMax + nums[i], currentMax);
-            previousMax = temp;
+            int curr = Math.max(i2 + nums[i], i1);
+            // switch i2 and i1
+            int temp = i1;
+            i1 = curr;
+            i2 = temp;
         }
-        return currentMax;
+        return i1;
     }
+    
 }

@@ -6,40 +6,29 @@
  *     ListNode(int x) { val = x; }
  * }
  */
-
- /*
- O(kN) k = number of lists
- O(1) space
- */
 class Solution {
     public ListNode mergeKLists(ListNode[] lists) {
-        ListNode dummy = null;
-        for (int i = 0; i < lists.length; i++) {
-            dummy = merger(dummy, lists[i]);
-        }
-        return dummy;
-    }
-    // built off the question of sorting 2 linkedlists
-    public ListNode merger(ListNode l1, ListNode l2) {
-        ListNode head = new ListNode(-1);
-        ListNode dummy = head;
-        while (l1 != null && l2 != null) {
-            if (l1.val <= l2.val) {
-                dummy.next = l1;
-                l1 = l1.next;
-                dummy = dummy.next;
-            } else {
-                dummy.next = l2;
-                l2 = l2.next;
-                dummy = dummy.next;
+        // heap optimization
+        // Nlogk
+        PriorityQueue<ListNode> heap = new PriorityQueue<>(new Comparator<ListNode>() {
+            @Override
+            public int compare(ListNode n1, ListNode n2) {
+                return n1.val - n2.val;
             }
+        });
+        for (int i = 0; i < lists.length; i++) {
+            if (lists[i] != null) heap.offer(lists[i]);
         }
-        if (l1 == null) {
-            dummy.next = l2;
+        ListNode dummy = new ListNode(-1);
+        ListNode node = new ListNode(-1);
+        dummy.next = node;
+        while (!heap.isEmpty()) {
+            ListNode curr = heap.poll();
+            node.next = new ListNode(curr.val);
+            node = node.next;
+            if (curr.next != null) heap.offer(curr.next);
         }
-        if (l2 == null) {
-            dummy.next = l1;
-        }
-        return head.next;
+        
+        return dummy.next.next;
     }
 }
